@@ -5,6 +5,7 @@ import InfoList from '@/components/InfoList'
 import details from '@/components/details'
 import opinion from '@/components/opinion'
 import AboutAs from '@/components/AboutAs'
+import search from '@/components/search'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/aboutAs',
       name: 'AboutAs',
       component: AboutAs
+    },
+    {
+      path: '/search',
+      name: 'search',
+      component: search
     }
   ]
 })

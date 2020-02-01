@@ -6,11 +6,32 @@ const path = require('path')
 
 module.exports = {
   dev: {
-
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/selectMsgByCondition': { // 使用"/api"来代替"http://f.apiplus.c" 点击立即查询按钮，进行自定义搜索查询
+        target: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov2019/selectMsgByCondition', // 源地址 target: 'http://192.168.0.102:8080'
+        changeOrigin: true, // 改变源
+        pathRewrite: {
+          '^/selectMsgByCondition': '/selectMsgByCondition' // 路径重写
+        }
+      },
+      '/selectAllMsgByPage': { // 分页查询全部信息
+        target: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov2019/selectAllMsgByPage', // 源地址 target: 'http://192.168.0.102:8080'
+        changeOrigin: true, // 改变源
+        pathRewrite: {
+          '^/selectAllMsgByPage': '/selectAllMsgByPage' // 路径重写
+        }
+      },
+      '/selectMsgById': { // 根据信息id查询本条信息的全部属性字段
+        target: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov2019/selectMsgById', // 源地址 target: 'http://192.168.0.102:8080'
+        changeOrigin: true, // 改变源
+        pathRewrite: {
+          '^/selectMsgById': '/selectMsgById' // 路径重写
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

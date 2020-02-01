@@ -41,7 +41,7 @@
 						page:'aboutAs',
 						normalImg:require('../assets/guanyu1.png'),
 						activeImg:require('../assets/guanyu2.png')
-					},
+					}
 				]
 			}
 		},

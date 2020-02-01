@@ -13,7 +13,7 @@
         </Col>
         <Col span="16">
           <!-- <input type="date" placeholder="请点击选择日期" > -->
-          <DatePicker type="date" placeholder="请点击选择日期" style="border: none;"></DatePicker>
+          <DatePicker v-model="datePicker" type="date" format="yyyy-MM-dd" placeholder="请点击选择日期" style="border: none;"></DatePicker>
         </Col>
       </Row>
       <Row class="list_item">
@@ -24,7 +24,7 @@
           <div class="line"></div>
         </Col>
         <Col span="16">
-          <input v-model="value" placeholder="请输入：车次/航班/车牌/x路" class="input_form"/>
+          <input v-model="checi" placeholder="请输入：车次/航班/车牌/x路" class="input_form"/>
         </Col>
       </Row>
       <Row class="list_item">
@@ -39,7 +39,7 @@
         </Col>
       </Row>
     </div>
-    <Button type="primary" style="width: 100%;height: 40px;margin-bottom: 40px;background-color: #6076ff;">立即查询</Button>
+    <Button type="primary" style="width: 100%;height: 40px;line-height: 40px;font-size: 23px;margin-bottom: 40px;background-color: #6076ff;" to="/search" @click="goSearch()">立即查询</Button>
     <div>
       <p style="color: #6076ff;">温馨提示</p>
       <p style="text-indent: 2em; margin-bottom: 40px;">
@@ -57,17 +57,35 @@
 
 <script>
 import Tabbar from'./tabbar'
+import api from '../services/api'
 export default {
   name: 'HelloWorld',
   data () {
     return {
       selected: '首页',
-      value: '',
-      city: ''
+      checi: '',
+      city: '',
+      datePicker: ''
     }
   },
   components: {
     Tabbar
+  },
+  onLoad() {
+  },
+  methods: {
+    goSearch() {
+      var d = new Date(this.datePicker)
+      var resDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      // console.log('city---', this.city, resDate, this.datePicker,this.checi) 
+      api.select({
+        tDate: this.resDate,
+        tNo: this.checi,
+        tPosStart: this.city
+      }).then((res) => {
+        console.log(res)
+      })
+    }
   }
 }
 </script>
