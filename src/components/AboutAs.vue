@@ -1,6 +1,5 @@
 <template>
-  <div>
-    关于我们
+  <div class="page_aboutUs">
     <!-- 底部tabbar -->
     <Tabbar></Tabbar>
   </div>
@@ -15,6 +14,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less">
+  .page_aboutUs {
+    width: 100%;
+    height: 100%;
+    background: url('http://shiwanjia.zzgcyun.com/ssm_admin/ncov/about.jpg') no-repeat;
+    background-size: 100%;
+  }
 </style>

@@ -27,7 +27,7 @@
           </div>
         </div>
         <Button type="primary" class="btn" @click="goDetails(item)">点击查看详情</Button>
-        <div :class="['aircraft', item.ttype == 1 ? 'pink':'']">
+        <div :class="['aircraft', {pink:item.ttype==1},{skyblue:item.ttype==3},{orange:item.ttype==4},{FF3EFF:item.ttype==5},{FF66:item.ttype==6},{E90FF:item.ttype==7},{FFD700:item.ttype==8}]">
           <div class="icon">
             <img :src="item.iconUrl" alt="" class="air_icon">
             <p class="font_desc">{{item.typeName}}</p>
@@ -174,6 +174,24 @@ export default {
     }
     &.pink {
       border-color: transparent #FF7888;
+    }
+    &.skyblue {
+      border-color: transparent skyblue;
+    }
+    &.orange {
+      border-color: transparent orange;
+    }
+    &.FF66 {
+      border-color: transparent #66CDAA ;
+    }
+    &.FF3EFF {
+      border-color: transparent #FF3EFF;
+    }
+    &.E90FF {
+      border-color: transparent #1E90FF;
+    }
+    &.FFD700 {
+      border-color: transparent#FFD700;
     }
   }
 }

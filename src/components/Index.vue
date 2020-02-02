@@ -40,7 +40,7 @@
       </Row>
     </div>
     <Button type="primary" style="width: 100%;height: 40px;line-height: 40px;font-size: 23px;margin-bottom: 40px;background-color: #6076ff;" @click="goSearch()">立即查询</Button>
-    <div style="font-size: 13px;">
+    <div style="font-size: 13px; color: #888;">
       <p style="color: #6076ff;">温馨提示</p>
       <p style="text-indent: 2em;">
         * 同乘人员、可能接触人员返家后，暂不要外出，居家封闭隔离观察。如有发热症状请就近到网上公布的指定医院发热门诊救治。</p>
