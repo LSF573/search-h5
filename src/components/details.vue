@@ -70,7 +70,7 @@ export default {
   },
   mounted() {
     http.fetchPost('/ncov2019/selectMsgById', this.params).then((res) => {
-      console.log('data', res.data)
+      // console.log('data', res.data)
       this.info = res.data
     })
   },

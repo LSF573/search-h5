@@ -1,6 +1,11 @@
 <template>
   <div class="hello">
-    <h1>您好，欢迎使用</h1>
+    <div class="top">
+      <h1>您好，欢迎使用</h1>
+      <div size="large" class="share" @click="showPop()">分享给关心的人</div>
+      <!-- <Tag size="large">Large Tag</Tag> -->
+    </div>
+
     <h3>2019-nCoV患者相同行程查询工具</h3>
     <div class="form_data">
       <Row class="list_item">
@@ -39,7 +44,10 @@
         </Col>
       </Row>
     </div>
-    <Button type="primary" style="width: 100%;height: 40px;line-height: 40px;font-size: 23px;margin-bottom: 40px;background-color: #6076ff;" @click="goSearch()">立即查询</Button>
+    <Button type="primary" style="width: 100%;height: 40px;line-height: 40px;font-size: 18px;margin-bottom: 20px;background-color: #6076ff;" @click="goSearch()">立即查询</Button>
+    <div style="text-align: center;">
+      <Tag color="geekblue" style="margin-bottom: 20px;">{{selectnum}}人次已使用</Tag>
+    </div>
     <div style="font-size: 13px; color: #888;">
       <p style="color: #6076ff;">温馨提示</p>
       <p style="text-indent: 2em;">
@@ -54,6 +62,13 @@
       <img src="../assets/logo_longyuan.png" style="width: 20px;height: 20px; vertical-align: middle;"/>
       <span style="color:#6076ff; text-align: center;">郑州龙缘网络科技出品</span>
     </div>
+    <!-- 分享弹窗 -->
+    <div class="popup" v-show="isShowPopup" @touchmove.prevent>
+      <div class="mask" @click="close"/>
+      <div class="popup_cont center">
+        <img src="http://shiwanjia.zzgcyun.com/ssm_admin/ncov/fenxiang.png" alt="" class="tipimg">
+      </div>
+    </div>
     <!-- 底部tabbar -->
     <Tabbar></Tabbar>
   </div>
@@ -66,16 +81,23 @@ export default {
   name: 'HelloWorld',
   data () {
     return {
+      isShowPopup: false,
       selected: '首页',
       checi: '',
       city: '',
-      datePicker: ''
+      datePicker: '',
+      selectnum: 0
     }
   },
   components: {
     Tabbar
   },
-
+  mounted() {
+    http.fetchPost('ncovselectnum/selectNum').then((res) => {
+      console.log('data', res.data)
+      this.selectnum = res.data.selectnum
+    })
+  },
   methods: {
     goSearch() {
       console.log('this.datePicke',this.datePicker)
@@ -100,6 +122,13 @@ export default {
           tDate: this.datePicker, tNo: this.checi, tPosStart: this.city
         }
       })
+    },
+    close() {
+      this.isShowPopup = false
+    },
+    showPop() {
+      console.log('wertyuio')
+      this.isShowPopup = true
     }
   }
 }
@@ -107,51 +136,92 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
-
- .hello{
-  padding: 47px 32px 70px;
-  background-color: #fff;
-  h1,h3 {
-    font-weight: 400;
-  }
-  .company {
-    text-align: center;
-    font-size: 12px;
-  }
-  .tabBar {
-    width: 20px;
-    height: 20px;
-  }
-  .form_data {
-    margin: 40px 0;
-    .list_item {
-      // display: flex;
-      // align-items: center;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow:2px 2px 10px #eee;
-      padding: 12px 12px 10px;
-      margin-bottom: 12px;
-      .icon_img {
-        width: 20px;
-        height: 20px;
-        vertical-align: middle;
+  .hello{
+    padding: 47px 32px 70px;
+    background-color: #fff;
+    h1{
+      font-size: 20px;
+    }
+    h1,h3 {
+      font-weight: 400;
+    }
+    .top {
+      display: flex;
+      align-items: center;
+      .share {
+        width: 45%;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        color: #6076FF;
+        font-size: 13px;
+        border: 1px solid rgba(96,118,255,1);
+        line-height: 30px;
+        border-radius: 20px;
       }
-      .line {
-        width: 1px;
-        height: 23px;
-        background:rgba(204,204,204,1);
+    }
+    .company {
+      text-align: center;
+      font-size: 12px;
+    }
+    .tabBar {
+      width: 20px;
+      height: 20px;
+    }
+    .form_data {
+      margin: 40px 0;
+      .list_item {
+        // display: flex;
+        // align-items: center;
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow:2px 2px 10px #eee;
+        padding: 12px 12px 10px;
+        margin-bottom: 12px;
+        .icon_img {
+          width: 20px;
+          height: 20px;
+          vertical-align: middle;
+        }
+        .line {
+          width: 1px;
+          height: 23px;
+          background:rgba(204,204,204,1);
+        }
+        .input_form {
+          width: 100%;
+          outline: none;
+          border: none;
+        }
       }
-      .input_form {
+    }
+    .popup {
+      .mask {
+        position: fixed;
         width: 100%;
-        outline: none;
-        border: none;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1000;
+        background-color: rgba(0, 0, 0, 0.7);
+        overflow-y: hidden;
+      }
+      .popup_cont {
+        box-sizing: border-box;
+        position: fixed;
+        z-index: 1001;
+        width: 80%;
+        opacity: 1;
+        &.center{
+          top: 20%;
+          left: 50%;
+          transform: translate(-45%, -50%)!important;
+        }
+        .tipimg {
+          width: 100%;
+          height: 30%;
+        }
       }
     }
   }
-  
-}
-/* h2 {
-  font-weight: normal;
-} */
 </style>

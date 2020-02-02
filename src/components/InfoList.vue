@@ -1,6 +1,6 @@
 <template>
-  <div class="page_info">
-    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+  <div :class="['page_info', {nulldata:infoList.length < 1}]" v-show="isShow">
+    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" v-show='infoList.length > 0'>
       <div class="vehicle" v-for="(item,index) in infoList" :key="index" :item='item'>
         <div class="date">
           <Badge status="processing" />
@@ -35,6 +35,9 @@
         </div>
       </div>
     </div>
+    <Spin v-show="loading&&infoList.length>0">加载中...</Spin>
+    <div style="color:rgba(96,118,255,1);font-size: 13px;text-align:center;" v-show="!loading">我也是有底线的~</div>
+    <div class="null" v-show="infoList.length == 0"></div>
     <!-- 底部tabbar -->
     <Tabbar></Tabbar>
   </div>
@@ -50,7 +53,8 @@ export default {
       busy: false,
       pageNo: 1,
       params: {},
-      loading: true
+      loading: true,
+      isShow: false
     }
   },
   components: {
@@ -70,9 +74,10 @@ export default {
       })
     },
     getData() {
+      // this.loading = true
       this.params = { pageNow: this.pageNo }
       http.fetchPost('/ncov2019/selectAllMsgByPage', this.params).then((res) => {
-        console.log('data', res.data)
+        // console.log('data', res.data)
         if(this.pageNo == 1) {
           this.infoList = res.data
           if(res.data.length < 1) {
@@ -84,6 +89,7 @@ export default {
             this.loading = false
           }
         }
+        this.isShow = true
       })
     },
     loadMore() {
@@ -91,13 +97,9 @@ export default {
       if(this.loading) {
         // 分页数据请求
         setTimeout(() => {
-          // if(this.pageNo!==1){
-          //   this.requestApi()
-          // }
           this.pageNo++
           this.getData()
           this.busy = false
-          console.log(this.pageNo)
         }, 1000)
       }
     }
@@ -108,6 +110,10 @@ export default {
 <style lang="less">
 .page_info {
   padding: 15px 15px 70px;
+  &.nulldata {
+    width: 100%;
+    height: 100%;
+  }
   .vehicle {
     padding: 22px 16px 22px;
     background: rgba(255,255,255,1);
@@ -194,5 +200,12 @@ export default {
       border-color: transparent#FFD700;
     }
   }
+  .null {
+    width: 100%;
+    height: 100%;
+    background: url('http://shiwanjia.zzgcyun.com/ssm_admin/ncov/none.png') no-repeat;
+    background-size: 100% 100%;
+  }
+ 
 }
 </style>

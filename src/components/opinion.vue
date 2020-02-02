@@ -28,10 +28,10 @@ export default {
   },
   methods: {
     submit() {
-      console.log(this.textarea,this.userName,this.phone)
+      // console.log(this.textarea,this.userName,this.phone)
       this.params = { message: this.textarea, username: this.userName, phone: this.phone }
       http.fetchPost('/ncovmessages/addNcovMessages', this.params).then((res) => {
-        console.log('data', res.data)
+        // console.log('data', res.data)
         this.textarea = ''
         this.userName = ''
         this.phone = ''
