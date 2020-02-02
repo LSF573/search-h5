@@ -10,33 +10,19 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/selectMsgByCondition': { // 使用"/api"来代替"http://f.apiplus.c" 点击立即查询按钮，进行自定义搜索查询
-        target: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov2019/selectMsgByCondition', // 源地址 target: 'http://192.168.0.102:8080'
-        changeOrigin: true, // 改变源
-        pathRewrite: {
-          '^/selectMsgByCondition': '/selectMsgByCondition' // 路径重写
-        }
-      },
-      '/selectAllMsgByPage': { // 分页查询全部信息
-        target: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov2019/selectAllMsgByPage', // 源地址 target: 'http://192.168.0.102:8080'
-        changeOrigin: true, // 改变源
-        pathRewrite: {
-          '^/selectAllMsgByPage': '/selectAllMsgByPage' // 路径重写
-        }
-      },
-      '/selectMsgById': { // 根据信息id查询本条信息的全部属性字段
-        target: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov2019/selectMsgById', // 源地址 target: 'http://192.168.0.102:8080'
-        changeOrigin: true, // 改变源
-        pathRewrite: {
-          '^/selectMsgById': '/selectMsgById' // 路径重写
-        }
-      }
+      // '/select': { // 使用"/api"来代替"http://f.apiplus.c" 点击立即查询按钮，进行自定义搜索查询
+      //   target: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov2019', // 源地址 target: 'http://192.168.0.102:8080'
+      //   changeOrigin: true, // 改变源
+      //   pathRewrite: {
+      //     '^/select': 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov2019' // 路径重写
+      //   }
+      // }
     },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
-    autoOpenBrowser: false,
+    autoOpenBrowser: false, // 自动打开浏览器
     errorOverlay: true,
     notifyOnErrors: true,
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
@@ -71,7 +57,8 @@ module.exports = {
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    // assetsPublicPath: '/',
+    assetsPublicPath: process.env.CDN || '//shiwanjia.zzgcyun.com/',
 
     /**
      * Source Maps

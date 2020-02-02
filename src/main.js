@@ -8,7 +8,11 @@ import 'mint-ui/lib/style.css'
 import ViewUI from 'view-design'
 import 'view-design/dist/styles/iview.css'
 import infiniteScroll from 'vue-infinite-scroll'
+import axios from 'axios'
+import QS from 'qs'
 
+Vue.prototype.$axios = axios
+Vue.prototype.qs = QS
 Vue.config.productionTip = false
 Vue.use(ViewUI)
 Vue.use(MintUI)

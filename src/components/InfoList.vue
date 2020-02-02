@@ -4,18 +4,17 @@
       <div class="vehicle" v-for="(item,index) in infoList" :key="index" :item='item'>
         <div class="date">
           <Badge status="processing" />
-          <p class="">行程日期：<span>{{item.time}}</span></p>
+          <p class="">行程日期：<span>{{item.tdate}}</span></p>
         </div>
         <div class="date">
           <Badge status="processing" />
-          <p>车次信息：<span>{{item.checi}}</span></p>
+          <p>车次信息：<span>{{item.tno}}</span></p>
         </div>
         <div class="from_to">
           <div class="from_city">
             <p>(出发站)</p>
-            <p class="city">{{item.from}}</p>
-            <p>2020/1/22</p>
-            <p>上午12:00:00</p>
+            <p class="city">{{item.tposStart}}</p>
+            <p>{{item.tstart}}</p>
           </div>
           <div class="jiantou">
             <p>去往</p>
@@ -23,16 +22,15 @@
           </div>
           <div class="to_city">
             <p>(到达站)</p>
-            <p class="city">{{item.to}}</p>
-            <p>2020/1/22</p>
-            <p>下午12:00:00</p>
+            <p class="city">{{item.tposEnd}}</p>
+            <p>{{item.tend}}</p>
           </div>
         </div>
-        <Button type="primary" class="btn" to="/details">点击查看详情</Button>
-        <div class="aircraft">
+        <Button type="primary" class="btn" @click="goDetails(item)">点击查看详情</Button>
+        <div :class="['aircraft', item.ttype == 1 ? 'pink':'']">
           <div class="icon">
-            <img src="../assets/huoche.png" alt="" class="air_icon">
-            <p class="font_desc">火车</p>
+            <img :src="item.iconUrl" alt="" class="air_icon">
+            <p class="font_desc">{{item.typeName}}</p>
           </div>
         </div>
       </div>
@@ -43,51 +41,65 @@
 </template>
 
 <script>
+import http from '../http'
 import Tabbar from'./tabbar'
 export default {
   data() {
     return {
-      infoList: [
-        {
-          time: '2020年01月20日',
-          checi: 'G1807-12号车厢',
-          from: '武汉',
-          to: '郑州'
-        },
-        {
-          time: '2020年01月25日',
-          checi: 'G1807-13号车厢',
-          from: '武汉',
-          to: '郑州东'
-        },
-        {
-          time: '2020年01月25日',
-          checi: 'G1807-13号车厢',
-          from: '武汉',
-          to: '郑州东'
-        }
-      ],
+      infoList: [],
       busy: false,
-      pageNo: 1
+      pageNo: 1,
+      params: {},
+      loading: true
     }
-  },
-  mounted() {
-    document.title = '信息查询'
   },
   components: {
     Tabbar
   },
+  mounted() {
+    document.title = '信息查询'
+    this.getData()
+  },
   methods: {
+    goDetails(item) {
+      this.$router.push({
+        path: '/details',
+        query: { 
+          id: item.id
+        }
+      })
+    },
+    getData() {
+      this.params = { pageNow: this.pageNo }
+      http.fetchPost('/ncov2019/selectAllMsgByPage', this.params).then((res) => {
+        console.log('data', res.data)
+        if(this.pageNo == 1) {
+          this.infoList = res.data
+          if(res.data.length < 1) {
+            this.loading = false
+          }
+        } else {
+          this.infoList = this.infoList.concat(res.data)
+          if(res.data.length < 1) {
+            this.loading = false
+          }
+        }
+      })
+    },
     loadMore() {
       this.busy = true;
-      // 分页数据请求
-      setTimeout(() => {
-        // if(this.pageNo!==1){
-        //   this.requestApi()
-        // }
-        this.pageNo++;
-        this.busy = false
-      }, 1000)
+      if(this.loading) {
+        // 分页数据请求
+        setTimeout(() => {
+          // if(this.pageNo!==1){
+          //   this.requestApi()
+          // }
+          this.pageNo++
+          this.getData()
+          this.busy = false
+          console.log(this.pageNo)
+        }, 1000)
+      }
     }
   }
 }
@@ -97,7 +109,7 @@ export default {
 .page_info {
   padding: 15px 15px 70px;
   .vehicle {
-    padding: 22px 25px 22px;
+    padding: 22px 16px 22px;
     background: rgba(255,255,255,1);
     border-radius: 10px;
     box-shadow:2px 2px 10px #eee;
@@ -116,7 +128,7 @@ export default {
       .from_city, .to_city {
         text-align: center;
         .city {
-          font-size: 22px;
+          font-size: 20px;
           font-weight:500;
           color:rgba(96,118,255,1);
         }
@@ -160,7 +172,9 @@ export default {
         color: #fff;
       }
     }
-    
+    &.pink {
+      border-color: transparent #FF7888;
+    }
   }
 }
 </style>

@@ -39,15 +39,19 @@
         </Col>
       </Row>
     </div>
-    <Button type="primary" style="width: 100%;height: 40px;line-height: 40px;font-size: 23px;margin-bottom: 40px;background-color: #6076ff;" to="/search" @click="goSearch()">立即查询</Button>
-    <div>
+    <Button type="primary" style="width: 100%;height: 40px;line-height: 40px;font-size: 23px;margin-bottom: 40px;background-color: #6076ff;" @click="goSearch()">立即查询</Button>
+    <div style="font-size: 13px;">
       <p style="color: #6076ff;">温馨提示</p>
-      <p style="text-indent: 2em; margin-bottom: 40px;">
-        这里是温馨提示温馨提示，是温馨提示温馨提示这里是温馨提示温馨提示这里是温馨提示温馨提示这里是温馨提示温馨提示，这里是温馨提示温馨提示这里是温馨提示温馨提示
+      <p style="text-indent: 2em;">
+        * 同乘人员、可能接触人员返家后，暂不要外出，居家封闭隔离观察。如有发热症状请就近到网上公布的指定医院发热门诊救治。</p>
+      <p style="text-indent: 2em;">* 第一时间到所在社区进行登记，并与所在县（市）区疾病预防控制部门取得联系。</p>
+      <p style="text-indent: 2em;">* 就诊过程中，要全程佩戴口罩，尽量不要乘坐公共交通工具。</p>
+      <p style="text-indent: 2em;">* 您只能查询到经由官方媒体发布的新型冠状病毒感染的肺炎患者的行程，如未查询到行程信息并不代表一定没有与新型冠状病毒感染的肺炎患者同程，如出现症状请就近到指定发热门诊救治。</p>
+      <p style="text-indent: 2em; margin-bottom: 40px;">* 若各地官方机构希望增补行程数据、寻人信息，可联系：18336336975（电话微信）
       </p>
     </div>
     <div class="company">
-      <img src="../assets/logo_longyuan.png" style="width: 20px;height: 20px;"/>
+      <img src="../assets/logo_longyuan.png" style="width: 20px;height: 20px; vertical-align: middle;"/>
       <span style="color:#6076ff; text-align: center;">郑州龙缘网络科技出品</span>
     </div>
     <!-- 底部tabbar -->
@@ -57,7 +61,7 @@
 
 <script>
 import Tabbar from'./tabbar'
-import api from '../services/api'
+import http from '../http'
 export default {
   name: 'HelloWorld',
   data () {
@@ -71,19 +75,30 @@ export default {
   components: {
     Tabbar
   },
-  onLoad() {
-  },
+
   methods: {
     goSearch() {
-      var d = new Date(this.datePicker)
-      var resDate = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-      // console.log('city---', this.city, resDate, this.datePicker,this.checi) 
-      api.select({
-        tDate: this.resDate,
-        tNo: this.checi,
-        tPosStart: this.city
-      }).then((res) => {
-        console.log(res)
+      console.log('this.datePicke',this.datePicker)
+      if (this.datePicker) {
+        let d = new Date(this.datePicker)
+        var myyear = d.getFullYear()
+        var mymonth = d.getMonth() + 1
+        var myweekday = d.getDate()
+        if (mymonth < 10) {
+          mymonth = "0" + mymonth;
+        }
+        if (myweekday < 10) {
+          myweekday = "0" + myweekday;
+        }
+        let resDate = myyear + "-" + mymonth + "-" + myweekday
+        this.datePicker = resDate
+      }
+      console.log('city---', this.city, this.datePicker, this.checi) 
+      this.$router.push({
+        path: '/search',
+        query: { 
+          tDate: this.datePicker, tNo: this.checi, tPosStart: this.city
+        }
       })
     }
   }
@@ -100,11 +115,7 @@ export default {
     font-weight: 400;
   }
   .company {
-    display: flex;
-    align-items: center;
     text-align: center;
-    width: 50%;
-    margin: 0 auto;
     font-size: 12px;
   }
   .tabBar {
