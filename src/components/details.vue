@@ -42,7 +42,7 @@
     </div>
     <div class="list_desc">
       <span class="title">线索人</span>
-      <a :href="info.source" v-if="info.source">查看原文</a>
+      <a :href="info.source" v-if="info.source" style="color:#6076ff;">查看原文</a>
       <span class="answer" v-else>暂无</span>
     </div>
     <div class="list_desc">
@@ -167,6 +167,7 @@ export default {
       width: 80%;
       height: 40px;
       font-size: 18px;
+      background-color: #6076ff;
     }
   }
 </style>

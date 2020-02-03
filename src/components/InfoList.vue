@@ -3,7 +3,7 @@
     <div :class="['page_info', {nulldata:infoList.length < 1}]" v-show="isShow">
       <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
         <div class="vehicle" v-for="(item,index) in infoList" :key="index" :item='item'>
-          <div class="date">
+          <!-- <div class="date">
             <Badge status="processing" />
             <p class="">行程日期：<span class="tdate">{{item.tdate}}</span></p>
           </div>
@@ -11,6 +11,22 @@
             <Badge status="processing" />
             <p v-if="item.ttype != 8">车次信息：<span class="tdate">{{item.tno}} {{item.tnoSub}}</span></p>
             <p v-else>疫情位置：<span class="tdate">{{item.tno}}</span></p>
+          </div> -->
+          <div class="date">
+            <div class="badge">
+              <Badge status="processing"/>
+            </div>
+            <div class="title">行程日期：</div>
+            <div class="tdate">{{item.tdate}}</div>
+          </div>
+          <div class="date">
+            <div class="badge">
+              <Badge status="processing"/>
+            </div>
+            <div v-if="item.ttype != 8" class="title"> 车次信息：</div>
+            <div class="tdate" v-if="item.ttype != 8">{{item.tno}} {{item.tnoSub}}</div>
+            <div v-if="item.ttype == 8" class="title">疫情位置：</div>
+            <div class="tdate" v-if="item.ttype == 8">{{item.tno}}</div>
           </div>
           <div class="from_to" v-if="item.ttype!=8">
             <div class="from_city">
@@ -29,9 +45,11 @@
             </div>
           </div>
           <div class="date" v-if="item.ttype==8">
-            <Badge status="processing" />
-            <p>发生时间：</p>
-            <div class="tstart">
+            <div class="badge">
+              <Badge status="processing"/>
+            </div>
+            <p class="title">发生时间：</p>
+            <div class="tdate tend">
               <p>{{item.tstart}}（起）</p>
               <p>{{item.tend}}（止）</p>
             </div>
@@ -46,7 +64,7 @@
         </div>
       </div>
       <Spin v-show="loading&&infoList.length>0">加载中...</Spin>
-      <div style="color:#888;font-size: 13px;text-align:center;" v-show="!loading">没有更多了~</div>
+      <div style="color:#888;font-size: 13px;text-align:center;" v-show="!loading&&infoList.length>0">没有更多了~</div>
     </div>
     <Spin v-show="!isShow" class="spin">
       <Icon type="ios-loading" size=40 class="demo-spin-icon-load"></Icon>
@@ -149,7 +167,7 @@ export default {
     // 页面滑动
     handleScroll () {
       this.scroll  = document.documentElement && document.documentElement.scrollTop
-      console.log(this.scroll)
+      // console.log(this.scroll)
     },  
     goDetails(item) {
       this.$router.push({
@@ -208,13 +226,23 @@ export default {
     .date {
       display: flex;
       // align-items: center;
-      margin-bottom: 15px;
+      line-height: 1;
       font-size: 16px;
-      .tstart {
-        font-size: 14px;
+      .badge {
+        width: 13px;
       }
-      .tdate, .tstart {
+      .title {
+        width: 100px;
+      }
+      .tdate {
+        width: 70%;
+        font-size: 16px;
+        line-height: 1.5;
         color: #666;
+        margin-top: -4px;
+        &.tend {
+          font-size: 14px;
+        }
       }
     }
     .from_to {
@@ -295,12 +323,14 @@ export default {
     }
   }
   .null {
-    width: 100%;
+    width: 70%;
     height: 100%;
     background: url('http://shiwanjia.zzgcyun.com/ssm_admin/ncov/none.png') no-repeat;
-    background-size: 100% 100%;
+    background-size: 100%;
+    margin: 80px auto 0;
   }
   .spin {
+    color: #6076ff;
     position: fixed;
     top: 30%;
     left: 50%;

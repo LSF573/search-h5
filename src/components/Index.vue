@@ -44,23 +44,23 @@
         </Col>
       </Row>
     </div>
-    <Button type="primary" style="width: 100%;height: 40px;line-height: 40px;font-size: 18px;margin-bottom: 20px;background-color: #6076ff;" @click="goSearch()">立即查询</Button>
+    <Button type="primary" class="button" style="" @click="goSearch()">立即查询</Button>
     <div style="text-align: center;">
-      <Tag color="geekblue" style="margin-bottom: 20px;">{{selectnum}}人次已使用</Tag>
+      <Tag color="geekblue" class="tag">{{selectnum}}人次已使用</Tag>
     </div>
-    <div style="font-size: 13px; color: #888;">
-      <p style="color: #6076ff;">温馨提示</p>
-      <p style="text-indent: 2em;">
+    <div class="tip">
+      <p class="tip_title">温馨提示</p>
+      <p class="tip_item">
         * 同乘人员、可能接触人员返家后，暂不要外出，居家封闭隔离观察。如有发热症状请就近到网上公布的指定医院发热门诊救治。</p>
-      <p style="text-indent: 2em;">* 第一时间到所在社区进行登记，并与所在县（市）区疾病预防控制部门取得联系。</p>
-      <p style="text-indent: 2em;">* 就诊过程中，要全程佩戴口罩，尽量不要乘坐公共交通工具。</p>
-      <p style="text-indent: 2em;">* 您只能查询到经由官方媒体发布的新型冠状病毒感染的肺炎患者的行程，如未查询到行程信息并不代表一定没有与新型冠状病毒感染的肺炎患者同程，如出现症状请就近到指定发热门诊救治。</p>
-      <p style="text-indent: 2em; margin-bottom: 40px;">* 若各地官方机构希望增补行程数据、寻人信息，可联系：18336336975（电话微信）
+      <p class="tip_item">* 第一时间到所在社区进行登记，并与所在县（市）区疾病预防控制部门取得联系。</p>
+      <p class="tip_item">* 就诊过程中，要全程佩戴口罩，尽量不要乘坐公共交通工具。</p>
+      <p class="tip_item">* 您只能查询到经由官方媒体发布的新型冠状病毒感染的肺炎患者的行程，如未查询到行程信息并不代表一定没有与新型冠状病毒感染的肺炎患者同程，如出现症状请就近到指定发热门诊救治。</p>
+      <p class="tip_item last_item">* 若各地官方机构希望增补行程数据、寻人信息，可联系：<a href="tel://18336336975">18336336975</a>（电话微信）
       </p>
     </div>
     <div class="company">
       <img src="../assets/logo_longyuan.png" style="width: 20px;height: 20px; vertical-align: middle;"/>
-      <span style="color:#6076ff; text-align: center;">郑州龙缘网络科技出品</span>
+      <span class="company_name">郑州龙缘网络科技出品</span>
     </div>
     <!-- 分享弹窗 -->
     <div class="popup" v-show="isShowPopup" @touchmove.prevent>
@@ -197,10 +197,10 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
   .hello{
-    padding: 47px 32px 70px;
+    padding: 47px 32px 81px;
     background-color: #fff;
     h1{
-      font-size: 20px;
+      font-size: 19px;
     }
     h1,h3 {
       font-weight: 400;
@@ -221,9 +221,40 @@ export default {
         margin-left: 3px;
       }
     }
+    .tag {
+      margin-bottom: 20px;
+      border-radius: 20px;
+    }
+    .button {
+      width: 100%;
+      height: 44px;
+      line-height: 40px;
+      font-size: 18px;
+      margin-bottom: 20px;
+      background-color: #6076ff;
+    }
+    .tip{
+        font-size: 13px;
+      color: #888;
+      .tip_title {
+        color: #6076ff;
+        margin-bottom: 20px;
+      }
+      .tip_item {
+        text-indent: 2em;
+        margin-bottom: 10px;
+      }
+      .last_item {
+        margin-bottom: 20px;
+      }
+    }
     .company {
       text-align: center;
       font-size: 12px;
+      .company_name {
+        color:#6076ff;
+        text-align: center;
+      }
     }
     .tabBar {
       width: 20px;
