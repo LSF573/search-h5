@@ -1,7 +1,11 @@
 <template>
   <div id="app">
-    <!-- <img src="./assets/logo.png"> -->
-    <router-view/>
+    <!-- 缓存组件跳转的页面 -->
+    <keep-alive>    
+    　<router-view v-if="$route.meta.keepAlive" transition-mode="out-in"></router-view>
+    </keep-alive>  
+    <!-- 非缓存组件跳转页面 -->
+    <router-view v-if="!$route.meta.keepAlive" transition-mode="out-in"></router-view>
   </div>
 </template>
 

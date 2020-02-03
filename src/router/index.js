@@ -23,7 +23,10 @@ export default new Router({
     {
       path: '/Info',
       name: 'InfoList',
-      component: InfoList
+      component: InfoList,
+      meta: {
+        keepAlive: true
+      }
     },
     {
       path: '/details',
@@ -43,7 +46,10 @@ export default new Router({
     {
       path: '/search',
       name: 'search',
-      component: search
+      component: search,
+      meta: {
+        keepAlive: true
+      }
     }
   ]
 })

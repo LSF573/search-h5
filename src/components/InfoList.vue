@@ -69,7 +69,8 @@ export default {
       pageNo: 1,
       params: {},
       loading: true,
-      isShow: false
+      isShow: false,
+      scroll: 0 // 记录滑动
     }
   },
   components: {
@@ -77,7 +78,8 @@ export default {
   },
   mounted() {
     this.getData()
-    window.CateListScrollTop = 0
+    // 监听页面滑动
+    window.addEventListener('scroll', this.handleScroll)
     // 分享
     const href = window.location.href.split('#')[0]
     const params = { webUrl: href }
@@ -131,20 +133,24 @@ export default {
       })
     })
   },
-  beforeRouteLeave (to, from, next) {
-    //离开该页面的时候把高度记录
-    window.CateListScrollTop = document.documentElement.scrollTop || document.body.scrollTop
-    next()
+  // 页面滑动
+  activated() {
+    if(this.scroll > 0){
+      window.scrollTo(0, this.scroll);
+      this.scroll = 0;
+      window.addEventListener('scroll', this.handleScroll);
+     }
   },
-  activated() { 
-    //返回的时候滚动到记录的高度
-    //延时200ms，不延迟滚动的话，有商品页内容高度比较小的情况就返不回原来的位置
-    setTimeout(() => {
-      window.scrollTo(0, window.CateListScrollTop)
-    }, 200)
+  // 页面滑动
+  deactivated(){
+    window.removeEventListener('scroll', this.handleScroll);
   },
-
   methods: {
+    // 页面滑动
+    handleScroll () {
+      this.scroll  = document.documentElement && document.documentElement.scrollTop
+      console.log(this.scroll)
+    },  
     goDetails(item) {
       this.$router.push({
         path: '/details',
@@ -187,7 +193,7 @@ export default {
 
 <style lang="less">
 .page_info {
-  padding: 15px 15px 70px;
+  padding: 8px 8px 35px;
   &.nulldata {
     width: 100%;
     height: 100%;

@@ -77,6 +77,8 @@ export default {
       this.infoList = res.data
       this.isShow = true
     })
+    // 监听页面滑动
+    window.addEventListener('scroll', this.handleScroll)
     // 分享
     let href = window.location.href.split('#')[0]
     let params = {
@@ -132,7 +134,24 @@ export default {
       })
     })
   },
+  // 页面滑动
+  activated() {
+    if(this.scroll > 0){
+      window.scrollTo(0, this.scroll);
+      this.scroll = 0;
+      window.addEventListener('scroll', this.handleScroll);
+     }
+  },
+  // 页面滑动
+  deactivated(){
+    window.removeEventListener('scroll', this.handleScroll);
+  },
   methods: {
+    // 页面滑动
+    handleScroll () {
+      this.scroll  = document.documentElement && document.documentElement.scrollTop
+      console.log(this.scroll)
+    },
     goDetails(item) {
       this.$router.push({
         path: '/details',
