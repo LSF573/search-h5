@@ -2,51 +2,52 @@
   <div class="page_details">
     <div class="list_desc">
       <span class="title">交通类型</span>
-      <p class="answer">{{info.typeName}}</p>
+      <p class="answer">{{info.typeName ? info.typeName : '暂无'}}</p>
     </div>
     <div class="list_desc">
       <span class="title">行程日期</span>
-      <p class="answer">{{info.tdate}}</p>
+      <p class="answer">{{info.tdate ? info.tdate : '暂无'}}</p>
     </div>
     <div class="list_desc">
       <span class="title">车次信息</span>
-      <p class="answer">{{info.tno}}</p>
+      <p class="answer">{{info.tno ? info.tno : '暂无'}}</p>
     </div>
     <div class="list_desc">
       <span class="title">车厢</span>
-      <span class="answer">{{info.tnoSub}}</span>
+      <span class="answer">{{info.tnoSub ? info.tnoSub : '暂无'}}</span>
     </div>
     <div class="list_desc">
       <span class="title">出发站</span>
-      <span class="answer">{{info.tposStart}}</span>
+      <span class="answer">{{info.tposStart ? info.tposStart : '暂无'}}</span>
     </div>
     <div class="list_desc">
       <span class="title">到达站</span>
-      <span class="answer">{{info.tposEnd}}</span>
+      <span class="answer">{{info.tposEnd ? info.tposEnd : '暂无'}}</span>
     </div>
     <div class="list_desc">
       <span class="title">车次附加描述</span>
-      <span class="answer tmemo">{{info.tmemo}}</span>
+      <span class="answer tmemo">{{info.tmemo ? info.tmemo : '暂无'}}</span>
     </div>
     <div class="list_desc">
       <span class="title">开始时间</span>
-      <p class="answer">{{info.tstart}}</p>
+      <p class="answer">{{info.tstart ? info.tstart : '暂无'}}</p>
     </div>
     <div class="list_desc">
       <span class="title">结束时间</span>
-      <span class="answer">{{info.tend}}</span>
+      <span class="answer">{{info.tend ? info.tend : '暂无'}}</span>
     </div>
     <div class="list_desc">
       <span class="title">信息来源</span>
-      <span class="answer">{{info.who}}</span>
+      <span class="answer">{{info.who ? info.who : '暂无'}}</span>
     </div>
     <div class="list_desc">
       <span class="title">线索人</span>
-      <a :href="info.source">查看原文</a>
+      <a :href="info.source" v-if="info.source">查看原文</a>
+      <span class="answer" v-else>暂无</span>
     </div>
     <div class="list_desc">
       <span class="title">提交时间</span>
-      <span class="answer">{{info.createdAt}}</span>
+      <span class="answer">{{info.createdAt ? info.createdAt : '暂无'}}</span>
     </div>
     <div class="list_desc">
       <span class="title">事件备注</span>

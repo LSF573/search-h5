@@ -1,43 +1,57 @@
 <template>
-  <div :class="['page_info', {nulldata:infoList.length < 1}]" v-show="isShow">
-    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" v-show='infoList.length > 0'>
-      <div class="vehicle" v-for="(item,index) in infoList" :key="index" :item='item'>
-        <div class="date">
-          <Badge status="processing" />
-          <p class="">行程日期：<span>{{item.tdate}}</span></p>
-        </div>
-        <div class="date">
-          <Badge status="processing" />
-          <p>车次信息：<span>{{item.tno}}</span></p>
-        </div>
-        <div class="from_to">
-          <div class="from_city">
-            <p>(出发站)</p>
-            <p class="city">{{item.tposStart}}</p>
-            <p>{{item.tstart}}</p>
+  <div :class="['page_info', {nulldata:infoList.length < 1}]">
+    <div :class="['page_info', {nulldata:infoList.length < 1}]" v-show="isShow">
+      <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+        <div class="vehicle" v-for="(item,index) in infoList" :key="index" :item='item'>
+          <div class="date">
+            <Badge status="processing" />
+            <p class="">行程日期：<span class="tdate">{{item.tdate}}</span></p>
           </div>
-          <div class="jiantou">
-            <p>去往</p>
-            <img src="../assets/jiantou.png" alt="" style="width: 90px;height: 14px;">
+          <div class="date">
+            <Badge status="processing" />
+            <p v-if="item.ttype != 8">车次信息：<span class="tdate">{{item.tno}} {{item.tnoSub}}</span></p>
+            <p v-else>疫情位置：<span class="tdate">{{item.tno}}</span></p>
           </div>
-          <div class="to_city">
-            <p>(到达站)</p>
-            <p class="city">{{item.tposEnd}}</p>
-            <p>{{item.tend}}</p>
+          <div class="from_to" v-if="item.ttype!=8">
+            <div class="from_city">
+              <p>(出发站)</p>
+              <p class="city">{{item.tposStart}}</p>
+              <p>{{item.tstart}}</p>
+            </div>
+            <div class="jiantou">
+              <p>去往</p>
+              <img src="../assets/jiantou.png" alt="" style="width: 90px;height: 14px;">
+            </div>
+            <div class="to_city">
+              <p>(到达站)</p>
+              <p class="city">{{item.tposEnd}}</p>
+              <p>{{item.tend}}</p>
+            </div>
           </div>
-        </div>
-        <Button type="primary" class="btn" @click="goDetails(item)">点击查看详情</Button>
-        <div :class="['aircraft', {pink:item.ttype==1},{skyblue:item.ttype==3},{orange:item.ttype==4},{FF3EFF:item.ttype==5},{FF66:item.ttype==6},{E90FF:item.ttype==7},{FFD700:item.ttype==8}]">
-          <div class="icon">
-            <img :src="item.iconUrl" alt="" class="air_icon">
-            <p class="font_desc">{{item.typeName}}</p>
+          <div class="date" v-if="item.ttype==8">
+            <Badge status="processing" />
+            <p>发生时间：</p>
+            <div class="tstart">
+              <p>{{item.tstart}}（起）</p>
+              <p>{{item.tend}}（止）</p>
+            </div>
+          </div>
+          <Button type="primary" class="btn" @click="goDetails(item)">点击查看详情</Button>
+          <div :class="['aircraft', {pink:item.ttype==1},{skyblue:item.ttype==3},{orange:item.ttype==4},{FF3EFF:item.ttype==5},{FF66:item.ttype==6},{E90FF:item.ttype==7},{FFD700:item.ttype==8}]">
+            <div class="icon">
+              <img :src="item.iconUrl" alt="" class="air_icon" v-if="item.ttype!= 8">
+              <p :class="['typeName', {font_desc:item.ttype == 8}]">{{item.typeName}}</p>
+            </div>
           </div>
         </div>
       </div>
+      <Spin v-show="loading&&infoList.length>0">加载中...</Spin>
+      <div style="color:#888;font-size: 13px;text-align:center;" v-show="!loading">没有更多了~</div>
     </div>
-    <Spin v-show="loading&&infoList.length>0">加载中...</Spin>
-    <div style="color:rgba(96,118,255,1);font-size: 13px;text-align:center;" v-show="!loading">我也是有底线的~</div>
-    <div class="null" v-show="infoList.length == 0"></div>
+    <Spin v-show="!isShow" class="spin">
+      <Icon type="ios-loading" size=40 class="demo-spin-icon-load"></Icon>
+      <div>Loading</div>
+    </Spin>
     <!-- 底部tabbar -->
     <Tabbar></Tabbar>
   </div>
@@ -63,6 +77,7 @@ export default {
   },
   mounted() {
     this.getData()
+    window.CateListScrollTop = 0
     // 分享
     const href = window.location.href.split('#')[0]
     const params = { webUrl: href }
@@ -116,6 +131,19 @@ export default {
       })
     })
   },
+  beforeRouteLeave (to, from, next) {
+    //离开该页面的时候把高度记录
+    window.CateListScrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    next()
+  },
+  activated() { 
+    //返回的时候滚动到记录的高度
+    //延时200ms，不延迟滚动的话，有商品页内容高度比较小的情况就返不回原来的位置
+    setTimeout(() => {
+      window.scrollTo(0, window.CateListScrollTop)
+    }, 200)
+  },
+
   methods: {
     goDetails(item) {
       this.$router.push({
@@ -126,10 +154,8 @@ export default {
       })
     },
     getData() {
-      // this.loading = true
       this.params = { pageNow: this.pageNo }
       http.fetchPost('/ncov2019/selectAllMsgByPage', this.params).then((res) => {
-        // console.log('data', res.data)
         if(this.pageNo == 1) {
           this.infoList = res.data
           if(res.data.length < 1) {
@@ -175,9 +201,15 @@ export default {
     position: relative;
     .date {
       display: flex;
-      align-items: center;
+      // align-items: center;
       margin-bottom: 15px;
       font-size: 16px;
+      .tstart {
+        font-size: 14px;
+      }
+      .tdate, .tstart {
+        color: #666;
+      }
     }
     .from_to {
       display: flex;
@@ -185,6 +217,7 @@ export default {
       align-items: center;
       .from_city, .to_city {
         text-align: center;
+        color: #666;
         .city {
           font-size: 20px;
           font-weight:500;
@@ -224,10 +257,13 @@ export default {
         height: 16px;
         margin-right: 4px;
       }
-      .font_desc {
+      .typeName {
         font-size: 13px;
-        width: 14px;
         color: #fff;
+        &.font_desc {
+          width: 30px;
+          margin-top: 5px;
+        }
       }
     }
     &.pink {
@@ -258,6 +294,14 @@ export default {
     background: url('http://shiwanjia.zzgcyun.com/ssm_admin/ncov/none.png') no-repeat;
     background-size: 100% 100%;
   }
- 
+  .spin {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%)!important;
+    .demo-spin-icon-load{
+      animation: ani-demo-spin 1s linear infinite;
+    }
+  }
 }
 </style>

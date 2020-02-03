@@ -1,6 +1,6 @@
 <template>
   <div class="page_aboutUs">
-    <div class="adv"></div>
+    <img class="adv" src="http://shiwanjia.zzgcyun.com/ssm_admin/ncov/about.jpg" alt="">
     <!-- 底部tabbar -->
     <Tabbar></Tabbar>
   </div>
@@ -9,6 +9,7 @@
 <script>
 import Tabbar from'./tabbar'
 import wx from 'weixin-js-sdk'
+import http from '../http'
 export default {
   components: {
     Tabbar
@@ -75,12 +76,10 @@ export default {
   .page_aboutUs {
     width: 100%;
     height: 100%;
+    padding-bottom: 50px;
     .adv {
       width: 100%;
       height: 100%;
-      background: url('http://shiwanjia.zzgcyun.com/ssm_admin/ncov/about.jpg') no-repeat;
-      background-size: 100% 100%;
-      margin-bottom: 50px;
     }
   }
 </style>

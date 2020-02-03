@@ -1,40 +1,57 @@
 <template>
-  <div class="page_info">
-    <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
-      <div class="vehicle" v-for="(item,index) in infoList" :key="index" :item='item'>
-        <div class="date">
-          <Badge status="processing" />
-          <p class="">行程日期：<span>{{item.tdate}}</span></p>
-        </div>
-        <div class="date">
-          <Badge status="processing" />
-          <p>车次信息：<span>{{item.tno}}</span></p>
-        </div>
-        <div class="from_to">
-          <div class="from_city">
-            <p>(出发站)</p>
-            <p class="city">{{item.tposStart}}</p>
-            <p>{{item.tstart}}</p>
+  <div :class="['page_info', {nulldata:infoList.length < 1}]">
+    <div :class="['page_info', {nulldata:infoList.length < 1}]" v-show="isShow">
+      <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10" v-show='infoList.length > 0'>
+        <div class="vehicle" v-for="(item,index) in infoList" :key="index" :item='item'>
+          <div class="date">
+            <Badge status="processing" />
+            <p class="">行程日期：<span class="tdate">{{item.tdate}}</span></p>
           </div>
-          <div class="jiantou">
-            <p>去往</p>
-            <img src="../assets/jiantou.png" alt="" style="width: 90px;height: 14px;">
+          <div class="date">
+            <Badge status="processing" />
+            <p v-if="item.ttype != 8"> 车次信息：<span class="tdate">{{item.tno}} {{item.tnoSub}}</span></p>
+            <p v-else>疫情位置：<span class="tdate">{{item.tno}}</span></p>
           </div>
-          <div class="to_city">
-            <p>(到达站)</p>
-            <p class="city">{{item.tposEnd}}</p>
-            <p>{{item.tend}}</p>
+          <div class="from_to" v-if="item.ttype!=8">
+            <div class="from_city">
+              <p>(出发站)</p>
+              <p class="city">{{item.tposStart}}</p>
+              <p>{{item.tstart}}</p>
+            </div>
+            <div class="jiantou">
+              <p>去往</p>
+              <img src="../assets/jiantou.png" alt="" style="width: 90px;height: 14px;">
+            </div>
+            <div class="to_city">
+              <p>(到达站)</p>
+              <p class="city">{{item.tposEnd}}</p>
+              <p>{{item.tend}}</p>
+            </div>
           </div>
-        </div>
-        <Button type="primary" class="btn" @click="goDetails(item)">点击查看详情</Button>
-        <div :class="['aircraft', item.ttype == 1 ? 'pink':'']">
-          <div class="icon">
-            <img :src="item.iconUrl" alt="" class="air_icon">
-            <p class="font_desc">{{item.typeName}}</p>
+          <div class="date" v-if="item.ttype==8">
+            <Badge status="processing" />
+            <p>发生时间：</p>
+            <div class="tstart">
+              <p>{{item.tstart}}（起）</p>
+              <p>{{item.tend}}（止）</p>
+            </div>
+          </div>
+          <Button type="primary" class="btn" @click="goDetails(item)">点击查看详情</Button>
+          <div :class="['aircraft', item.ttype == 1 ? 'pink':'']">
+            <div class="icon">
+              <img :src="item.iconUrl" alt="" class="air_icon">
+              <p class="font_desc">{{item.typeName}}</p>
+            </div>
           </div>
         </div>
       </div>
+      <div class="null" v-show="infoList.length == 0"></div>
+      <div style="color:#888;font-size: 13px;text-align:center;">没有更多了~</div>
     </div>
+    <Spin v-show="!isShow" class="spin">
+      <Icon type="ios-loading" size=40 class="demo-spin-icon-load"></Icon>
+      <div>Loading</div>
+    </Spin>
   </div>
 </template>
 
@@ -47,17 +64,18 @@ export default {
       infoList: [],
       busy: false,
       pageNo: 1,
-      params: {}
+      params: {},
+      isShow: false,
+      loading: true
     }
   },
   created() {
     this.params = { tDate: this.$route.query.tDate, tNo: this.$route.query.tNo, tPosStart: this.$route.query.tPosStart}
   },
   mounted() {
-    document.title = '信息查询'
     http.fetchPost('/ncov2019/selectMsgByCondition', this.params).then((res) => {
-      // console.log('data', res.data)
       this.infoList = res.data
+      this.isShow = true
     })
     // 分享
     let href = window.location.href.split('#')[0]
@@ -141,7 +159,11 @@ export default {
 
 <style lang="less">
 .page_info {
-  padding: 15px 15px 70px;
+  padding: 8px 8px 35px;
+  &.nulldata {
+    width: 100%;
+    height: 100%;
+  }
   .vehicle {
     padding: 22px 16px 22px;
     background: rgba(255,255,255,1);
@@ -154,6 +176,12 @@ export default {
       align-items: center;
       margin-bottom: 15px;
       font-size: 16px;
+      .tstart {
+        font-size: 14px;
+      }
+      .tdate, .tstart {
+        color: #666;
+      }
     }
     .from_to {
       display: flex;
@@ -161,6 +189,7 @@ export default {
       align-items: center;
       .from_city, .to_city {
         text-align: center;
+        color: #666;
         .city {
           font-size: 20px;
           font-weight:500;
@@ -208,6 +237,21 @@ export default {
     }
     &.pink {
       border-color: transparent #FF7888;
+    }
+  }
+  .null {
+    width: 100%;
+    height: 100%;
+    background: url('http://shiwanjia.zzgcyun.com/ssm_admin/ncov/none.png') no-repeat;
+    background-size: 100% 100%;
+  }
+  .spin {
+    position: fixed;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%)!important;
+    .demo-spin-icon-load{
+      animation: ani-demo-spin 1s linear infinite;
     }
   }
 }

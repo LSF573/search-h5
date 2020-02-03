@@ -170,13 +170,18 @@ export default {
         let resDate = myyear + "-" + mymonth + "-" + myweekday
         this.datePicker = resDate
       }
-      console.log('city---', this.city, this.datePicker, this.checi) 
-      this.$router.push({
-        path: '/search',
-        query: { 
-          tDate: this.datePicker, tNo: this.checi, tPosStart: this.city
-        }
-      })
+      // console.log('city---', this.city, this.datePicker, this.checi) 
+      if(!this.datePicker&&!this.checi&&!this.city) {
+        alert('请输入您要查询的内容')
+      } else {
+        this.$router.push({
+          path: '/search',
+          query: { 
+            tDate: this.datePicker, tNo: this.checi, tPosStart: this.city
+          }
+        })
+      }
+      
     },
     close() {
       this.isShowPopup = false

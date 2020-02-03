@@ -39,7 +39,7 @@ export default {
           activeImg: require('../assets/fankui2.png')
         },
         {
-          txt: '关于我们',
+          txt: '技术支持',
           page: '/aboutAs',
           normalImg: require('../assets/guanyu1.png'),
           activeImg: require('../assets/guanyu2.png')
