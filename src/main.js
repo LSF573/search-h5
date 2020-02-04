@@ -7,7 +7,6 @@ import MintUI from 'mint-ui'
 import 'mint-ui/lib/style.css'
 import ViewUI from 'view-design'
 import 'view-design/dist/styles/iview.css'
-import infiniteScroll from 'vue-infinite-scroll'
 import axios from 'axios'
 import QS from 'qs'
 
@@ -16,7 +15,7 @@ Vue.prototype.qs = QS
 Vue.config.productionTip = false
 Vue.use(ViewUI)
 Vue.use(MintUI)
-Vue.use(infiniteScroll)
+// Vue.use(infiniteScroll)
 
 // window.$api = Vue.prototype.$api = api
 /* eslint-disable no-new */

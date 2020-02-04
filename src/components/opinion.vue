@@ -1,9 +1,9 @@
 <template>
   <div class="page_opinion">
     <p class="tip">请留下您宝贵的建议：</p>
-    <Input v-model="textarea" maxlength="200" show-word-limit type="textarea" placeholder="感谢您提出的宝贵意见，我们将不断完善！" style="width: 100%;" />
+    <Input v-model="textarea" maxlength="200" :rows="4" show-word-limit type="textarea" placeholder="感谢您提出的宝贵意见，我们将不断完善！" style="width: 100%;" />
     <p class="name">姓名</p>
-    <input type="text" placeholder="请输入您的姓名（选填）" v-model="userName" class="input_name" style="width: 100%;height: 45px;">
+    <input type="text" placeholder="请输入您的姓名（选填）" v-model="userName" class="input_name" style="">
     <p class="name">电话/微信</p>
     <input type="text" placeholder="请输入您的手机号或微信号（选填）" v-model="phone" class="input_name" style="width: 100%;height: 45px;">
     <Button type="primary" class="btn" @click="submit()">立即提交</Button>
@@ -28,6 +28,7 @@ export default {
     Tabbar
   },
   mounted() {
+    window.scrollTo(0, 0)
     let href = window.location.href.split('#')[0]
     let params = {
       webUrl: href
@@ -85,25 +86,41 @@ export default {
     submit() {
       // console.log(this.textarea,this.userName,this.phone)
       this.params = { message: this.textarea, username: this.userName, phone: this.phone }
-      http.fetchPost('/ncovmessages/addNcovMessages', this.params).then((res) => {
+      if(this.textarea&&this.userName&&this.phone) {
+        http.fetchPost('/ncovmessages/addNcovMessages', this.params).then((res) => {
         // console.log('data', res.data)
-        this.textarea = ''
-        this.userName = ''
-        this.phone = ''
-        alert('提交成功!')
-      })
+          this.textarea = ''
+          this.userName = ''
+          this.phone = ''
+          alert('提交成功!')
+        })
+      } else {
+        alert('请输入您要反馈的内容')
+      }
     }
   }
 }
 </script>
 
 <style lang="less">
+  input::-webkit-input-placeholder {
+    color: rgb(193, 196, 202);
+  }
   .page_opinion {
     padding: 24px 15px;
     background-color: #F5F5F5;
     height: 100%;
     min-height: 100%;
     font-size: 16px;
+    .input_name {
+      width: 100%;
+      height: 45px;
+      padding: 0 7px;
+      border: 1px solid #dcdee2;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    
     .tip {
       font-size: 16px;
       color:rgba(51,51,51,1);

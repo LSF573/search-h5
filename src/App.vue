@@ -1,9 +1,9 @@
 <template>
   <div id="app">
     <!-- 缓存组件跳转的页面 -->
-    <keep-alive>    
+    <keep-alive> 
     　<router-view v-if="$route.meta.keepAlive" transition-mode="out-in"></router-view>
-    </keep-alive>  
+    </keep-alive>
     <!-- 非缓存组件跳转页面 -->
     <router-view v-if="!$route.meta.keepAlive" transition-mode="out-in"></router-view>
   </div>

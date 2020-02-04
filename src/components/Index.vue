@@ -13,33 +13,33 @@
           <!-- <Icon type="md-calendar" color='#6076ff' size="26"/> -->
           <img src="../assets/rili.png" alt="" class="icon_img">
         </Col>
-        <Col span='3'>
+        <Col span='2'>
           <div class="line"></div>
         </Col>
-        <Col span="16">
+        <Col span="17">
           <!-- <input type="date" placeholder="请点击选择日期" > -->
-          <DatePicker v-model="datePicker" type="date" format="yyyy-MM-dd" placeholder="请点击选择日期" style="border: none;"></DatePicker>
+          <DatePicker v-model="datePicker" type="date" format="yyyy-MM-dd" placeholder="请点击选择日期" class="datePicker"></DatePicker>
         </Col>
       </Row>
       <Row class="list_item">
         <Col span="3">
           <img src="../assets/cheliang.png" alt="" class="icon_img">
         </Col>
-        <Col span='3'>
+        <Col span='2'>
           <div class="line"></div>
         </Col>
-        <Col span="16">
-          <input v-model="checi" placeholder="请输入：车次/航班/车牌/x路" class="input_form"/>
+        <Col span="17">
+          <input v-model="checi" placeholder="车次/航班/车牌/x路公交" class="input_form"/>
         </Col>
       </Row>
       <Row class="list_item">
         <Col span="3">
           <img src="../assets/diqu.png" alt="" class="icon_img">
         </Col>
-        <Col span='3'>
+        <Col span='2'>
           <div class="line"></div>
         </Col>
-        <Col span="16">
+        <Col span="17">
           <input v-model="city" placeholder="例如：武汉或成都（可不填）" class="input_form"/>
         </Col>
       </Row>
@@ -55,12 +55,12 @@
       <p class="tip_item">* 第一时间到所在社区进行登记，并与所在县（市）区疾病预防控制部门取得联系。</p>
       <p class="tip_item">* 就诊过程中，要全程佩戴口罩，尽量不要乘坐公共交通工具。</p>
       <p class="tip_item">* 您只能查询到经由官方媒体发布的新型冠状病毒感染的肺炎患者的行程，如未查询到行程信息并不代表一定没有与新型冠状病毒感染的肺炎患者同程，如出现症状请就近到指定发热门诊救治。</p>
-      <p class="tip_item last_item">* 若各地官方机构希望增补行程数据、寻人信息，可联系：<a href="tel://18336336975">18336336975</a>（电话微信）
+      <p class="tip_item last_item">* 若各地官方机构希望增补行程数据、寻人信息，可联系：<a href="tel://18336336975" style="color:#6076ff;">18336336975</a>（电话微信）
       </p>
     </div>
     <div class="company">
       <img src="../assets/logo_longyuan.png" style="width: 20px;height: 20px; vertical-align: middle;"/>
-      <span class="company_name">郑州龙缘网络科技出品</span>
+      <span class="company_name">©龙缘网络科技提供技术支持</span>
     </div>
     <!-- 分享弹窗 -->
     <div class="popup" v-show="isShowPopup" @touchmove.prevent>
@@ -94,6 +94,7 @@ export default {
     Tabbar
   },
   mounted() {
+    window.scrollTo(0, 0)
     http.fetchPost('ncovselectnum/selectNum').then((res) => {
       console.log('data', res.data)
       this.selectnum = res.data.selectnum
@@ -181,7 +182,9 @@ export default {
           }
         })
       }
-      
+      // this.datePicker = ''
+      // this.checi = ''
+      // this.city = ''
     },
     close() {
       this.isShowPopup = false
@@ -196,6 +199,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="less">
+  input::-webkit-input-placeholder {
+    color: rgb(193, 196, 202);
+  }
   .hello{
     padding: 47px 32px 81px;
     background-color: #fff;
@@ -224,6 +230,7 @@ export default {
     .tag {
       margin-bottom: 20px;
       border-radius: 20px;
+      background-color: #fff;
     }
     .button {
       width: 100%;
@@ -237,12 +244,14 @@ export default {
         font-size: 13px;
       color: #888;
       .tip_title {
+        font-size: 15px;
+        font-weight: 500;
         color: #6076ff;
-        margin-bottom: 20px;
+        margin-bottom: 12px;
       }
       .tip_item {
         text-indent: 2em;
-        margin-bottom: 10px;
+        margin-bottom: 6px;
       }
       .last_item {
         margin-bottom: 20px;
@@ -280,6 +289,10 @@ export default {
           height: 23px;
           background:rgba(204,204,204,1);
         }
+        // .ivu-date-picker-rel .ivu-input-wrapper > input {
+        //   border: none !important;
+        //   padding: 0;
+        // }
         .input_form {
           width: 100%;
           outline: none;

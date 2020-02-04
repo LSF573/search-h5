@@ -15,6 +15,7 @@ export default {
     Tabbar
   },
   mounted() {
+    window.scrollTo(0, 0)
     let href = window.location.href.split('#')[0]
     let params = {
       webUrl: href
@@ -75,11 +76,9 @@ export default {
 <style lang="less">
   .page_aboutUs {
     width: 100%;
-    height: 100%;
-    padding-bottom: 50px;
+    padding-bottom: 45px;
     .adv {
       width: 100%;
-      height: 100%;
     }
   }
 </style>

@@ -44,10 +44,10 @@
             </div>
           </div>
           <Button type="primary" class="btn" @click="goDetails(item)">点击查看详情</Button>
-          <div :class="['aircraft', item.ttype == 1 ? 'pink':'']">
+          <div :class="['aircraft', {pink:item.ttype==1},{skyblue:item.ttype==3},{orange:item.ttype==4},{FF3EFF:item.ttype==5},{FF66:item.ttype==6},{E90FF:item.ttype==7},{d5a012:item.ttype==8}]">
             <div class="icon">
-              <img :src="item.iconUrl" alt="" class="air_icon">
-              <p class="font_desc">{{item.typeName}}</p>
+              <img :src="item.iconUrl" alt="" class="air_icon" v-if="item.ttype!= 8">
+              <p :class="['typeName', {font_desc:item.ttype == 8}]">{{item.typeName}}</p>
             </div>
           </div>
         </div>
@@ -231,35 +231,59 @@ export default {
     font-size: 15px;
     margin-bottom: 40px;
     background-color: #6076ff;
-    margin: 22px auto 10px;
+    margin: 15px auto 0;
   }
   .aircraft {
     position: absolute;
     top: 0;
     right: 0;
-    border-width: 0 115px 70px 0;
-    // border-radius: 0 10px 0 0;
-    border-style: solid;
-    border-color: transparent #6076FF;
+    width: 120px;
+    height: 70px;
+    background: linear-gradient(30deg, transparent 50%, #6076FF 0%);
+    background-size: 120px 70px;
+    border-top-right-radius: 4px;
     .icon {
       position: absolute;
-      top: 10px;
+      top: 11px;
       left: 65px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       .air_icon {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         margin-right: 4px;
       }
-      .font_desc {
-        font-size: 13px;
-        width: 14px;
+      .typeName {
+        width: 16px;
+        line-height: 1.2;
+        font-size: 14px;
         color: #fff;
+        &.font_desc {
+          width: 30px;
+          margin-top: 5px;
+        }
       }
     }
     &.pink {
-      border-color: transparent #FF7888;
+      background: linear-gradient(30deg, transparent 50%, #ff4359 0%);
+    }
+    &.skyblue {
+      background: linear-gradient(30deg, transparent 50%, skyblue 0%);
+    }
+    &.orange {
+      background: linear-gradient(30deg, transparent 50%, orange 0%);
+    }
+    &.FF66 {
+      background: linear-gradient(30deg, transparent 50%, #66CDAA 0%);
+    }
+    &.FF3EFF {
+      background: linear-gradient(30deg, transparent 50%, #34c825 0%);
+    }
+    &.E90FF {
+      background: linear-gradient(30deg, transparent 50%, #1E90FF 0%);
+    }
+    &.d5a012 {
+      background: linear-gradient(30deg, transparent 50%, #d5a012 0%);
     }
   }
   .null {

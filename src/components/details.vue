@@ -71,8 +71,8 @@ export default {
     this.params = { id: this.$route.query.id }
   },
   mounted() {
+    window.scrollTo(0, 0)
     http.fetchPost('/ncov2019/selectMsgById', this.params).then((res) => {
-      // console.log('data', res.data)
       this.info = res.data
     })
     // 分享
@@ -81,7 +81,6 @@ export default {
       webUrl: href
     }
     http.fetchPost('/ncov2019/wxForward', params).then((res) => {
-      console.log('data', res.data)
       const { WXparams, imgUrl, link, title, desc } = res.data
       wx.config({
         debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。

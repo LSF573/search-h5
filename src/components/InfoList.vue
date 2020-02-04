@@ -1,17 +1,8 @@
 <template>
   <div :class="['page_info', {nulldata:infoList.length < 1}]">
     <div :class="['page_info', {nulldata:infoList.length < 1}]" v-show="isShow">
-      <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+      <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="0">
         <div class="vehicle" v-for="(item,index) in infoList" :key="index" :item='item'>
-          <!-- <div class="date">
-            <Badge status="processing" />
-            <p class="">行程日期：<span class="tdate">{{item.tdate}}</span></p>
-          </div>
-          <div class="date">
-            <Badge status="processing" />
-            <p v-if="item.ttype != 8">车次信息：<span class="tdate">{{item.tno}} {{item.tnoSub}}</span></p>
-            <p v-else>疫情位置：<span class="tdate">{{item.tno}}</span></p>
-          </div> -->
           <div class="date">
             <div class="badge">
               <Badge status="processing"/>
@@ -55,7 +46,7 @@
             </div>
           </div>
           <Button type="primary" class="btn" @click="goDetails(item)">点击查看详情</Button>
-          <div :class="['aircraft', {pink:item.ttype==1},{skyblue:item.ttype==3},{orange:item.ttype==4},{FF3EFF:item.ttype==5},{FF66:item.ttype==6},{E90FF:item.ttype==7},{FFD700:item.ttype==8}]">
+          <div :class="['aircraft', {pink:item.ttype==1},{skyblue:item.ttype==3},{orange:item.ttype==4},{FF3EFF:item.ttype==5},{FF66:item.ttype==6},{E90FF:item.ttype==7},{d5a012:item.ttype==8}]">
             <div class="icon">
               <img :src="item.iconUrl" alt="" class="air_icon" v-if="item.ttype!= 8">
               <p :class="['typeName', {font_desc:item.ttype == 8}]">{{item.typeName}}</p>
@@ -63,7 +54,10 @@
           </div>
         </div>
       </div>
-      <Spin v-show="loading&&infoList.length>0">加载中...</Spin>
+      <Spin class="loading" v-show="loading&&infoList.length>0">
+        <Icon type="ios-loading" size=20 class="demo-spin-icon-load"></Icon>
+        <div>加载中...</div>
+      </Spin>
       <div style="color:#888;font-size: 13px;text-align:center;" v-show="!loading&&infoList.length>0">没有更多了~</div>
     </div>
     <Spin v-show="!isShow" class="spin">
@@ -79,6 +73,8 @@
 import http from '../http'
 import Tabbar from'./tabbar'
 import wx from 'weixin-js-sdk'
+import infiniteScroll from 'vue-infinite-scroll'
+
 export default {
   data() {
     return {
@@ -162,6 +158,7 @@ export default {
   // 页面滑动
   deactivated(){
     window.removeEventListener('scroll', this.handleScroll);
+    this.busy = true
   },
   methods: {
     // 页面滑动
@@ -215,6 +212,11 @@ export default {
   &.nulldata {
     width: 100%;
     height: 100%;
+  }
+  .loading {
+    .demo-spin-icon-load{
+      animation: ani-demo-spin 1s linear infinite;
+    }
   }
   .vehicle {
     padding: 22px 16px 22px;
@@ -270,29 +272,32 @@ export default {
     font-size: 15px;
     margin-bottom: 40px;
     background-color: #6076ff;
-    margin: 22px auto 10px;
+    margin: 15px auto 0;
   }
   .aircraft {
     position: absolute;
     top: 0;
     right: 0;
-    border-width: 0 115px 70px 0;
-    // border-radius: 0 10px 0 0;
-    border-style: solid;
-    border-color: transparent #6076FF;
+    width: 120px;
+    height: 70px;
+    background: linear-gradient(30deg, transparent 50%, #6076FF 0%);
+    background-size: 120px 70px;
+    border-top-right-radius: 4px;
     .icon {
       position: absolute;
-      top: 10px;
+      top: 11px;
       left: 65px;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       .air_icon {
-        width: 16px;
-        height: 16px;
+        width: 18px;
+        height: 18px;
         margin-right: 4px;
       }
       .typeName {
-        font-size: 13px;
+        width: 16px;
+        line-height: 1.2;
+        font-size: 14px;
         color: #fff;
         &.font_desc {
           width: 30px;
@@ -301,25 +306,25 @@ export default {
       }
     }
     &.pink {
-      border-color: transparent #FF7888;
+      background: linear-gradient(30deg, transparent 50%, #ff4359 0%);
     }
     &.skyblue {
-      border-color: transparent skyblue;
+      background: linear-gradient(30deg, transparent 50%, skyblue 0%);
     }
     &.orange {
-      border-color: transparent orange;
+      background: linear-gradient(30deg, transparent 50%, orange 0%);
     }
     &.FF66 {
-      border-color: transparent #66CDAA ;
+      background: linear-gradient(30deg, transparent 50%, #66CDAA 0%);
     }
     &.FF3EFF {
-      border-color: transparent #FF3EFF;
+      background: linear-gradient(30deg, transparent 50%, #34c825 0%);
     }
     &.E90FF {
-      border-color: transparent #1E90FF;
+      background: linear-gradient(30deg, transparent 50%, #1E90FF 0%);
     }
-    &.FFD700 {
-      border-color: transparent#FFD700;
+    &.d5a012 {
+      background: linear-gradient(30deg, transparent 50%, #d5a012 0%);
     }
   }
   .null {

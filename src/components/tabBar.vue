@@ -23,26 +23,26 @@ export default {
         {
           txt: '立即查询',
           page: '/index',
-          normalImg: require('../assets/chaxun1.png'),
-          activeImg: require('../assets/chaxun2.png')
+          normalImg: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov/icon/foot/chaxun1.png',
+          activeImg: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov/icon/foot/chaxun2.png'
         },
         {
           txt: '全部信息',
           page: '/Info',
-          normalImg: require('../assets/quanbu1.png'),
-          activeImg: require('../assets/quanbu2.png')
+          normalImg: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov/icon/foot/quanbu1.png',
+          activeImg: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov/icon/foot/quanbu2.png'
         },
         {
           txt: '意见反馈',
           page: '/opinion',
-          normalImg: require('../assets/fankui1.png'),
-          activeImg: require('../assets/fankui2.png')
+          normalImg: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov/icon/foot/fankui1.png',
+          activeImg: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov/icon/foot/fankui2.png'
         },
         {
           txt: '技术支持',
           page: '/aboutAs',
-          normalImg: require('../assets/guanyu1.png'),
-          activeImg: require('../assets/guanyu2.png')
+          normalImg: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov/icon/foot/guanyu1.png',
+          activeImg: 'http://shiwanjia.zzgcyun.com/ssm_admin/ncov/icon/foot/guanyu2.png'
         }
       ]
     }
